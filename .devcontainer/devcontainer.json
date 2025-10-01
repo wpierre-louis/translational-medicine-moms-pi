@@ -1,15 +1,6 @@
 {
-  "name": "Universal + R + Python",
+  "name": "Universal + R via apt",
   "image": "mcr.microsoft.com/devcontainers/universal:2",
-  "features": {
-    "ghcr.io/devcontainers/features/r:1": {
-      "version": "4.3",
-      "installRadian": true
-    },
-    "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11"
-    }
-  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -19,5 +10,6 @@
         "Iterative.dvc"
       ]
     }
-  }
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y r-base r-base-dev libcurl4-openssl-dev libxml2-dev libssl-dev && pip install -r requirements.txt"
 }
