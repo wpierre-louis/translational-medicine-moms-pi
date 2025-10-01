@@ -1,11 +1,23 @@
 {
-  "name": "R + Python (DVC)",
-  "image": "mcr.microsoft.com/devcontainers/r:4",
+  "name": "Universal + R + Python",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
   "features": {
+    "ghcr.io/devcontainers/features/r:1": {
+      "version": "4.3",
+      "installRadian": true
+    },
     "ghcr.io/devcontainers/features/python:1": {
-      "version": "3.11",
-      "installTools": true
+      "version": "3.11"
     }
   },
-  "postCreateCommand": "pip install -r requirements.txt && R -q -e 'if(!requireNamespace(\"BiocManager\",quietly=TRUE)) install.packages(\"BiocManager\"); BiocManager::install(c(\"HMP2Data\",\"phyloseq\"))'"
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "REditorSupport.r",
+        "Iterative.dvc"
+      ]
+    }
+  }
 }
