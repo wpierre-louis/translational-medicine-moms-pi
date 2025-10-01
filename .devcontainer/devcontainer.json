@@ -1,0 +1,11 @@
+{
+  "name": "R + Python (DVC)",
+  "image": "mcr.microsoft.com/devcontainers/r:4",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.11",
+      "installTools": true
+    }
+  },
+  "postCreateCommand": "pip install -r requirements.txt && R -q -e 'if(!requireNamespace(\"BiocManager\",quietly=TRUE)) install.packages(\"BiocManager\"); BiocManager::install(c(\"HMP2Data\",\"phyloseq\"))'"
+}
