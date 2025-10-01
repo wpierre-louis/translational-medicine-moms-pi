@@ -1,8 +1,8 @@
 # translational-medicine-moms-pi
-### <ins>Origin</ins>\
+### <ins>Origin</ins>
 This project uses the Human Microbiome Project 2 (HMP2) MomSPI dataset, a large-scale study characterizing microbial dynamics in pregnancy. The dataset contains multi-omic and clinical metadata across thousands of samples, providing insight into how microbial communities shift in maternal health. 
 
-### <ins>Focus</ins>\
+### <ins>Focus</ins>
 While the broader MomSPI dataset includes oral, gut, cervical, and other body sites, this repository focuses on the vaginal microbiome subset during pregnancy. This site-specific lens highlights microbial taxa that play a central role in maternal and neonatal outcomes.
 
 ### Current Outputs:
@@ -40,4 +40,4 @@ python scripts/prep_tableau.py \
 ```
 
 3. Open in Tableau
-Load ```bash data/processed/tableau_vaginal_genus.csv``` to explore vaginal community composition visually.
+Load ``` data/processed/tableau_vaginal_genus.csv``` to explore vaginal community composition visually.
