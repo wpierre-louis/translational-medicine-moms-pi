@@ -4,35 +4,43 @@ suppressPackageStartupMessages({
   library(phyloseq)
 })
 
-# --- Setup output path ---
+# Setup output path
 outdir <- "data/processed"
 if (!dir.exists(outdir)) dir.create(outdir, recursive = TRUE, showWarnings = FALSE)
 
-# --- Load dataset ---
+# Load HMP2 MomSPI dataset 
 ps <- momspi16S()
-meta <- as.data.frame(sample_data(ps))
 
-# --- Filter to vaginal samples only ---
-keep_vals <- c("vagina","vaginal","vaginal swab")
-keep_idx <- tolower(trimws(meta$sample_body_site)) %in% keep_vals
-cand_ids <- meta$file_name[keep_idx]
-cand_ids <- intersect(cand_ids, sample_names(ps))
-stopifnot(length(cand_ids) > 0)
-ps_vag <- prune_samples(cand_ids, ps)
+# Calculate alpha diversity metrics
+alpha <- estimate_richness(ps, measures = c("Shannon", "Simpson"))
 
-# --- Calculate alpha diversity metrics ---
-alpha <- estimate_richness(ps_vag, measures = c("Shannon", "Simpson"))
-alpha$sample_id <- rownames(alpha)
+# Clean sample IDs 
+alpha$sample_id <- tolower(trimws(rownames(alpha)))
 
-# --- Merge with sample metadata ---
-meta_vag <- meta[match(alpha$sample_id, meta$file_name), 
-                 c("file_name","subject_id","visit_number","subject_gender","subject_race",
-                   "sample_body_site","study_full_name","project_name"),
-                 drop = FALSE]
-meta_vag$sample_id <- meta_vag$file_name
-alpha_merged <- merge(alpha, meta_vag, by = "sample_id", all.x = TRUE)
+# Load pre-exported vaginal metadata 
+meta_vag <- read.csv(file.path(outdir, "vaginal_metadata.csv"), stringsAsFactors = FALSE)
 
-# --- Write outputs ---
-outfile <- file.path(outdir, "tableau_alpha_diversity.csv")
-write.csv(alpha_merged, outfile, row.names = FALSE)
-cat(" Wrote:", outfile, "with", nrow(alpha_merged), "rows\n")
+# --- Normalize IDs for joining ---
+meta_vag$file_name <- tolower(trimws(meta_vag$file_name))
+meta_vag$sample_id <- tolower(trimws(meta_vag$sample_id))
+
+# Debug overlap
+ov <- length(intersect(alpha$sample_id, meta_vag$sample_id))
+cat("Overlap detected:", ov, "of", nrow(alpha), "samples\n")
+
+# Merge alpha diversity results with demographics 
+merged <- merge(
+  alpha,
+  meta_vag[, c(
+    "sample_id","subject_id","visit_number","subject_gender",
+    "subject_race","sample_body_site","study_full_name","project_name"
+  )],
+  by = "sample_id",
+  all.x = TRUE
+)
+merged <- merged[merged$sample_id %in% meta_vag$sample_id, ]
+
+# Export 
+out_csv <- file.path(outdir, "tableau_alpha_diversity.csv")
+write.csv(merged, out_csv, row.names = FALSE)
+cat("Wrote merged alpha diversity with", nrow(merged), "rows\n")
