@@ -35,4 +35,4 @@ alpha_merged <- merge(alpha, meta_vag, by = "sample_id", all.x = TRUE)
 # --- Write outputs ---
 outfile <- file.path(outdir, "tableau_alpha_diversity.csv")
 write.csv(alpha_merged, outfile, row.names = FALSE)
-cat("✅ Wrote:", outfile, "with", nrow(alpha_merged), "rows\n")
+cat(" Wrote:", outfile, "with", nrow(alpha_merged), "rows\n")
