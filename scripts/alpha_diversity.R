@@ -32,8 +32,7 @@ cat("Overlap detected:", ov, "of", nrow(alpha), "samples\n")
 merged <- merge(
   alpha,
   meta_vag[, c(
-    "sample_id","subject_id","visit_number","subject_gender",
-    "subject_race","sample_body_site","study_full_name","project_name"
+    "sample_id","subject_id","visit_number","sample_body_site","study_full_name","project_name"
   )],
   by = "sample_id",
   all.x = TRUE
