@@ -1,6 +1,6 @@
 {
   "name": "Universal + R via apt",
-  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "image": "bioconductor/bioconductor_docker:RELEASE_3_17",
   "customizations": {
     "vscode": {
       "extensions": [
